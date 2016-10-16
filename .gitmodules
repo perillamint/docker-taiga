@@ -6,3 +6,6 @@
 	path = taiga-front-dist
 	url = https://github.com/taigaio/taiga-front-dist.git
 	branch = stable
+[submodule "taiga-contrib-slack"]
+	path = taiga-contrib-slack
+	url = https://github.com/taigaio/taiga-contrib-slack.git
