@@ -15,6 +15,23 @@ RUN set -x; \
     && apt-get install -y --no-install-recommends \
         locales \
         ca-certificates \
+        build-essential \
+        binutils-doc \
+        autoconf \
+        flex \
+        bison \
+        libjpeg-dev \
+        zlib1g-dev \
+        libzmq3-dev \
+        libgdbm-dev \
+        libncurses5-dev \
+        automake \
+        libtool \
+        libffi-dev \
+        curl \
+        git \
+        tmux \
+        gettext \
         nginx=${NGINX_VERSION} \
     && rm -rf /var/lib/apt/lists/*
 
@@ -52,15 +69,13 @@ RUN echo "LANGUAGE=en" >> /etc/default/locale
 ENV LANG en_US.UTF-8
 ENV LC_TYPE en_US.UTF-8
 
-ENV TAIGA_SSL False
-ENV TAIGA_HOSTNAME localhost
-ENV TAIGA_SECRET_KEY "!!!REPLACE-ME-j1598u1J^U*(y251u98u51u5981urf98u2o5uvoiiuzhlit3)!!!"
-ENV TAIGA_DB_NAME postgres
-ENV TAIGA_DB_USER postgres
-
-RUN python manage.py collectstatic --noinput
-
 RUN locale -a
+
+ENV TAIGA_SSL False
+#ENV TAIGA_HOSTNAME localhost
+#ENV TAIGA_SECRET_KEY "!!!REPLACE-ME-j1598u1J^U*(y251u98u51u5981urf98u2o5uvoiiuzhlit3)!!!"
+#ENV TAIGA_DB_NAME postgres
+#ENV TAIGA_DB_USER postgres
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log

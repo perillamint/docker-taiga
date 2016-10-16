@@ -1,5 +1,12 @@
 #!/bin/bash
 
+_term() {
+  echo "Caught SIGTERM signal!"
+  kill -TERM "$child" 2>/dev/null
+}
+
+trap _term SIGTERM
+
 # Sleep when asked to, to allow the database time to start
 # before Taiga tries to run /checkdb.py below.
 : ${TAIGA_SLEEP:=0}
@@ -37,10 +44,17 @@ if [ ! -z "$RABBIT_PORT_5672_TCP_ADDR" ]; then
 fi
 
 # Handle enabling SSL
-if [ "$TAIGA_SSL" = "True" ]; then
+if [ "$TAIGA_USE_SSL_URL" = "True" ] || [ "$TAIGA_SSL" = "True" ]; then
   echo "Enabling SSL support!"
   sed -i "s/http:\/\//https:\/\//g" /taiga/conf.json
   sed -i "s/ws:\/\//wss:\/\//g" /taiga/conf.json
+else
+  echo "Disabling SSL support!"
+  sed -i "s/https:\/\//http:\/\//g" /taiga/conf.json
+  sed -i "s/wss:\/\//ws:\/\//g" /taiga/conf.json
+fi
+
+if [ "$TAIGA_SSL" = "True" ]; then
   mv /etc/nginx/ssl.conf /etc/nginx/conf.d/default.conf
 fi
 
@@ -49,4 +63,6 @@ fi
 service nginx start
 
 # Start Taiga backend Django server
-exec "$@"
+"$@" &
+child=$!
+wait "$child"
