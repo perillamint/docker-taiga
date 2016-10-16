@@ -1,0 +1,17 @@
+TAIGA_HOSTNAME=awesome.host.name.example.com
+TAIGA_SECRET_KEY=SuperSecretKeyShouldPlacedHere
+TAIGA_DB_NAME=taiga
+TAIGA_DB_HOST=awesome.db.server.example.com
+TAIGA_DB_USER=taiga
+TAIGA_DB_PASSWORD=AwesomeDBPassword
+
+TAIGA_ENABLE_PUBLIC_REGISTER=False
+
+TAIGA_USE_SSL_URL=True
+TAIGA_ENABLE_EMAIL=True
+TAIGA_EMAIL_ADDR=awesome_email@example.com
+TAIGA_EMAIL_USER=awesome_email@example.com
+TAIGA_EMAIL_PASS=AwesomeEmailPassword
+TAIGA_EMAIL_HOST=awesome.smtp.example.com
+TAIGA_EMAIL_PORT=587
+TAIGA_EMAIL_USE_TLS=True
