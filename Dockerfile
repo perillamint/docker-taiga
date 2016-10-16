@@ -37,6 +37,9 @@ RUN set -x; \
 
 RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
 
+RUN cd /opt/ && wget https://nodejs.org/dist/v4.6.0/node-v4.6.0-linux-x64.tar.xz
+RUN cd /opt/ && tar xvf node-v4.6.0-linux-x64.tar.xz && rm node-v4.6.0-linux-x64.tar.xz && mv node-v4.6.0-linux-x64 nodejs
+
 COPY taiga-back /usr/src/taiga-back
 COPY taiga-front-dist/ /usr/src/taiga-front-dist
 COPY docker-settings.py /usr/src/taiga-back/settings/docker.py
@@ -82,6 +85,17 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
 EXPOSE 80 443
+
+# Install contribs
+RUN cd /usr/src/taiga-front-dist/dist/ && mkdir -p plugins
+
+# contrib-slack
+COPY taiga-contrib-slack /usr/src/taiga-contrib-slack
+RUN cd /usr/src/taiga-contrib-slack/back && pip install -e .
+RUN echo "INSTALLED_APPS += [\"taiga_contrib_slack\"]" >> /taiga/local.py
+RUN cd /usr/src/taiga-front-dist/dist/plugins && ln -s /usr/src/taiga-contrib-slack/front/dist slack
+RUN cd /usr/src/taiga-contrib-slack/front && /opt/nodejs/bin/npm install
+RUN cd /usr/src/taiga-contrib-slack/front && PATH=/opt/nodejs/bin/:$PATH ./node_modules/.bin/gulp build
 
 COPY checkdb.py /checkdb.py
 COPY docker-entrypoint.sh /docker-entrypoint.sh

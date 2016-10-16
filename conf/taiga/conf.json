@@ -9,5 +9,7 @@
     "privacyPolicyUrl": null,
     "termsOfServiceUrl": null,
     "maxUploadFileSize": null,
-    "contribPlugins": []
+    "contribPlugins": [
+        "/plugins/slack/slack.json"
+    ]
 }

@@ -30,6 +30,9 @@ if [ -z "$TAIGA_SKIP_DB_CHECK" ]; then
   fi
 fi
 
+# Migrations
+python manage.py migrate taiga_contrib_slack --noinput
+
 # Look for static folder, if it does not exist, then generate it
 if [ ! -d "/usr/src/taiga-back/static" ]; then
   python manage.py collectstatic --noinput
