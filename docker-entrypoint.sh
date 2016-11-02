@@ -12,6 +12,10 @@ trap _term SIGTERM
 : ${TAIGA_SLEEP:=0}
 sleep $TAIGA_SLEEP
 
+# Migrations
+python manage.py migrate --noinput
+python manage.py migrate taiga_contrib_slack --noinput
+
 # Setup database automatically if needed
 if [ -z "$TAIGA_SKIP_DB_CHECK" ]; then
   python /checkdb.py
@@ -22,16 +26,12 @@ if [ -z "$TAIGA_SKIP_DB_CHECK" ]; then
     exit 1
   elif [ $DB_CHECK_STATUS -eq 2 ]; then
     echo "Configuring initial database"
-    python manage.py migrate --noinput
     python manage.py loaddata initial_user
     python manage.py loaddata initial_project_templates
     python manage.py loaddata initial_role
     python manage.py compilemessages
   fi
 fi
-
-# Migrations
-python manage.py migrate taiga_contrib_slack --noinput
 
 # Look for static folder, if it does not exist, then generate it
 if [ ! -d "/usr/src/taiga-back/static" ]; then
