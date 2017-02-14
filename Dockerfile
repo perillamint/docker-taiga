@@ -99,5 +99,7 @@ RUN cd /usr/src/taiga-contrib-slack/front && PATH=/opt/nodejs/bin/:$PATH ./node_
 
 COPY checkdb.py /checkdb.py
 COPY docker-entrypoint.sh /docker-entrypoint.sh
+
+VOLUME /usr/src/taiga-back/media
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
