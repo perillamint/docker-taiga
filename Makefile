@@ -26,7 +26,7 @@ ps:
 	docker ps
 
 logs:
-	docker logs taiga
+	docker logs -f taiga
 
 shell:
 	docker exec -t -i -u root taiga /bin/bash
